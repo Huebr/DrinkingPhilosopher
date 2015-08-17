@@ -29,8 +29,8 @@ public class Console {
         ActorSystem system = ActorSystem.create();
         ActorRef waiter = system.actorOf(Waiter.mkProps(filosofosAndBottles.size()));
         ArrayList<ActorRef> my_philosophers=new ArrayList<>();
-        for(int i=1;i<num_philosophers+1;i++){
-            my_philosophers.add(system.actorOf(Philosopher.mkProps(("Filosofo "+i),filosofosAndBottles.get(i), waiter)));
+        for(int i=0;i<num_philosophers;i++){
+            my_philosophers.add(system.actorOf(Philosopher.mkProps(("Filosofo "+(i+1)),filosofosAndBottles.get(i), waiter)));
         }
         system.awaitTermination();
         System.out.println("Terminou.");
