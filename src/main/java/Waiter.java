@@ -17,11 +17,17 @@ public class Waiter extends UntypedActor {
 
     private enum BottleState {FREE, USED};
     private BottleState[] mBottle;
+    private ActorRef[] Bottleuser;
+    private ActorRef[] rBottle;
     private ArrayList<ActorRef> mPhilosophers;
     private int timetostop;
 
     private Waiter(int bottleCount) {
         mBottle = new BottleState[bottleCount];
+        rBottle=new ActorRef[bottleCount];
+        Bottleuser=new ActorRef[bottleCount];
+        Arrays.fill(Bottleuser,null);
+        Arrays.fill(rBottle,null);
         Arrays.fill(mBottle, BottleState.FREE);
         mPhilosophers = new ArrayList<ActorRef>();
         timetostop=0;
@@ -35,8 +41,32 @@ public class Waiter extends UntypedActor {
             mPhilosophers.add(getSender());
             getSender().tell(new Messages.Tranquil(), getSelf());
         }
-        else if(message instanceof Messages.Thirsty){
-            getSender().tell(new Messages.Drinking(),getSelf());
+        else if(message instanceof Messages.Request){
+            int idx=((Messages.Request) message).getRb()-1;
+            if(mBottle[idx].equals(BottleState.FREE)){
+                Bottleuser[idx]=getSender();
+                mBottle[idx]=BottleState.USED;
+                //System.out.println("Filosofo"+((Messages.Request) message).getId()+" pegou garrafa"+ (idx+1));
+                getSender().tell(new Messages.TakeBottle(idx + 1), getSelf());
+            }
+            else{
+                rBottle[idx]=getSender();
+                Bottleuser[idx].tell(message,getSelf());
+            }
+
+        }
+        else if(message instanceof Messages.TakeBottle){
+            int idx=((Messages.TakeBottle) message).getMb()-1;
+            if(rBottle[idx]!=null){
+                Bottleuser[idx]=rBottle[idx];
+                //System.out.println("garrafa"+ (idx+1));
+                rBottle[idx].tell(new Messages.TakeBottle(idx+1),getSelf());
+                rBottle[idx]=null;
+            }
+            else{
+                Bottleuser[idx]=null;
+                mBottle[idx]=BottleState.FREE;
+            }
         }
         else if(message instanceof Messages.FinishDrinking){
             timetostop++;

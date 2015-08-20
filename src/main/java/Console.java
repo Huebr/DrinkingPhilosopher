@@ -18,6 +18,13 @@ public class Console {
 
     public static void main(String[] args) {
         loadGarrafas();
+        System.out.println("------------------------------------------------");
+        System.out.println("Numero de Garrafas "+filosofosAndBottles.size());
+        System.out.println("Garrafas por filosofos :");
+        for(int i=0;i<filosofosAndBottles.size();++i){
+            System.out.println("Filosofo "+(i+1)+" "+filosofosAndBottles.get(i));
+        }
+        System.out.println("------------------------------------------------");
         long startTime = System.nanoTime();
         runSimulation();
         System.out.println((TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - startTime))+" s");
@@ -27,10 +34,10 @@ public class Console {
         if (num_philosophers == 0 || filosofosAndBottles.isEmpty())
             System.out.println("Não é possivel rodar simulacao por falta de filosofos ou garrafas");
         ActorSystem system = ActorSystem.create();
-        ActorRef waiter = system.actorOf(Waiter.mkProps(filosofosAndBottles.size()));
+        ActorRef waiter = system.actorOf(Waiter.mkProps(num_bottles));
         ArrayList<ActorRef> my_philosophers=new ArrayList<>();
         for(int i=0;i<num_philosophers;i++){
-            my_philosophers.add(system.actorOf(Philosopher.mkProps(("Filosofo "+(i+1)),filosofosAndBottles.get(i), waiter)));
+            my_philosophers.add(system.actorOf(Philosopher.mkProps(("Filosofo "+(i+1)), i+1,5,filosofosAndBottles.get(i), waiter)));
         }
         system.awaitTermination();
         System.out.println("Terminou.");
