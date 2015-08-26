@@ -22,7 +22,6 @@ public class Messages {
     public static class Drinking { }
     public static class Thirsty{}
     public static class FinishDrinking { }
-    public static class TryDrink { }
     public static class Request{
         private int msnum;
         private int rb;//requested bottle

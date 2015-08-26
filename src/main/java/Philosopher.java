@@ -30,6 +30,10 @@ public class Philosopher extends UntypedActor {
     private int atualtime;
     private long ithirtytime;
     private long cthirstytime;
+    private long idrinktime;
+    private long cdrinktime;
+    private long itranquiltime;
+    private long ctranquiltime;
 
     private Philosopher(String aName,int id,int mytime,ArrayList<Integer> bottles, ActorRef mywaiter) {
         name = aName;
@@ -43,6 +47,10 @@ public class Philosopher extends UntypedActor {
         mtime=mytime;
         atualtime=0;
         cthirstytime=0;
+        idrinktime=0;
+        cdrinktime=0;
+        itranquiltime=0;
+        ctranquiltime=0;
         // Let`s introduce ourselves to Waiter
         mywaiter.tell(new Messages.Introduce(aName), getSelf());
     }
@@ -52,6 +60,7 @@ public class Philosopher extends UntypedActor {
         if (message instanceof Messages.Tranquil) {
             System.out.println(name + " tranquil.");
             state="Tranquil";
+            itranquiltime=System.nanoTime();
             Random r1 = new Random(System.currentTimeMillis());
             Thread.sleep(r1.nextInt(MAX_TRANQUIL_TIME));
             ArrayList<Integer> temp = new ArrayList<>(mBottles);
@@ -68,6 +77,7 @@ public class Philosopher extends UntypedActor {
             getSelf().tell(new Messages.Thirsty(), getSelf());
         }else if(message instanceof Messages.Thirsty){
             //try drink
+            ctranquiltime+=System.nanoTime()-itranquiltime;
             state="Thirsty";
             ithirtytime=System.nanoTime();
             if(nBottles.equals(hBottles)){
@@ -102,6 +112,7 @@ public class Philosopher extends UntypedActor {
         else if (message instanceof Messages.Drinking) {
             cthirstytime+=System.nanoTime()-ithirtytime;
             state="Drinking";
+            idrinktime=System.nanoTime();
             System.out.println(name + " drinking " + " bottles " + hBottles);
             Thread.sleep(DRINKING_TIME);
             nBottles.clear();
@@ -110,10 +121,15 @@ public class Philosopher extends UntypedActor {
             }
             hBottles.clear();
             System.out.println(name + " esta satisfeito.");
-            if(++atualtime<mtime)getSelf().tell(new Messages.Tranquil(), getSelf());
+            cdrinktime+=System.nanoTime()-idrinktime;
+            if(++atualtime<mtime){
+                getSelf().tell(new Messages.Tranquil(), getSelf());
+            }
             else waiter.tell(new Messages.FinishDrinking(), getSelf());
         }else if( message instanceof Messages.Stop){
             System.out.println(name+" ficou com sede por "+ TimeUnit.NANOSECONDS.toSeconds(cthirstytime)+" s.");
+            System.out.println(name+" ficou bebendo por "+ TimeUnit.NANOSECONDS.toSeconds(cdrinktime)+" s.");
+            System.out.println(name+" ficou tranquilo por "+ TimeUnit.NANOSECONDS.toSeconds(ctranquiltime)+" s.");
             System.out.println(name + " pagou a conta e saiu.");
         }
     }

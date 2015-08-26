@@ -27,7 +27,7 @@ public class Console {
         System.out.println("------------------------------------------------");
         long startTime = System.nanoTime();
         runSimulation();
-        System.out.println((TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - startTime))+" s");
+        System.out.println((TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - startTime))+" s.");
     }
 
     private static void runSimulation() {
@@ -40,7 +40,9 @@ public class Console {
             my_philosophers.add(system.actorOf(Philosopher.mkProps(("Filosofo "+(i+1)), i+1,5,filosofosAndBottles.get(i), waiter)));
         }
         system.awaitTermination();
-        System.out.println("Terminou.");
+        System.out.println("---------------------------------");
+        System.out.print("Tempo Total de Execucao : ");
+
     }
 
 

@@ -70,8 +70,15 @@ public class Waiter extends UntypedActor {
         }
         else if(message instanceof Messages.FinishDrinking){
             timetostop++;
-            getSender().tell(new Messages.Stop(),getSelf());
-            if(timetostop==mPhilosophers.size())getContext().system().shutdown();
+            if(timetostop==mPhilosophers.size()){
+                //Thread.sleep(10);//garantir que todas as threads acabaram.
+                for(ActorRef t1:mPhilosophers){
+                    Thread.sleep(10);
+                    t1.tell(new Messages.Stop(), getSelf());
+                }
+                Thread.sleep(10);
+                getContext().system().shutdown();
+            }
         }
     }
 }
