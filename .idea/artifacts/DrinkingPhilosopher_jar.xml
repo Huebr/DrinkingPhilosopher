@@ -1,13 +1,11 @@
 <component name="ArtifactManager">
-  <artifact name="DrinkingPhilosopher:jar">
+  <artifact type="jar" name="DrinkingPhilosopher:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/DrinkingPhilosopher_jar</output-path>
-    <root id="root">
-      <element id="archive" name="DrinkingPhilosopher.jar">
-        <element id="module-output" name="DrinkingPhilosopher" />
-      </element>
-      <element id="library" level="project" name="Maven: org.scala-lang:scala-library:2.10.2" />
-      <element id="library" level="project" name="Maven: com.typesafe.akka:akka-actor_2.10:2.2-SNAPSHOT" />
-      <element id="library" level="project" name="Maven: com.typesafe:config:1.0.1" />
+    <root id="archive" name="DrinkingPhilosopher.jar">
+      <element id="module-output" name="DrinkingPhilosopher" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.10.2/scala-library-2.10.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/typesafe/akka/akka-actor_2.10/2.2-SNAPSHOT/akka-actor_2.10-2.2-SNAPSHOT.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/typesafe/config/1.0.1/config-1.0.1.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

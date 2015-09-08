@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Class-Path: scala-library-2.10.2.jar akka-actor_2.10-2.2-SNAPSHOT.jar 
- config-1.0.1.jar
-Main-Class: Console
-
