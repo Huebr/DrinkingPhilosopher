@@ -65,14 +65,14 @@ public class Philosopher extends UntypedActor {
             Thread.sleep(r1.nextInt(MAX_TRANQUIL_TIME));
             ArrayList<Integer> temp = new ArrayList<>(mBottles);
             int cap = r1.nextInt(temp.size()) + 1;
-            while (cap > 0) {//será
-                int temp_number;
+            int temp_number;
+            while (cap > 0) {
                 temp_number = r1.nextInt(temp.size());
                 nBottles.add(temp.get(temp_number));
                 temp.remove(temp_number);
-                snum = maxrec + 1;
                 cap--;
             }
+            snum = maxrec + 1;
             System.out.println(name + " quer beber garrafas "+nBottles);
             getSelf().tell(new Messages.Thirsty(), getSelf());
         }else if(message instanceof Messages.Thirsty){
@@ -98,7 +98,7 @@ public class Philosopher extends UntypedActor {
         }
         else if(message instanceof Messages.Request){
             maxrec=Math.max(((Messages.Request) message).getSnum(),snum);
-            if(state.equals("Thisty")){//nao coloquei need
+            if(state.equals("Thisty")){
                 if(((Messages.Request) message).getSnum()<snum){
                     hBottles.remove((Integer)((Messages.Request) message).getRb());
                     waiter.tell(new Messages.TakeBottle(((Messages.Request) message).getRb()),getSelf());
